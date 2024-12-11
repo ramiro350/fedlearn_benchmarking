@@ -3,7 +3,7 @@ from mininet.node import Controller, OVSSwitch
 from mininet.cli import CLI
 from mininet.log import setLogLevel
 
-def star_topology():
+def modified_topology():
     # Prompt user for the number of hosts
     try:
         num_hosts = int(input("Enter the number of hosts: "))
@@ -20,13 +20,17 @@ def star_topology():
     # Add a controller
     controller = net.addController('c0')
 
-    # Add a switch (central node in the star)
+    # Add a switch
     switch = net.addSwitch('s1')
 
-    # Add hosts and connect them to the switch
-    for i in range(1, num_hosts + 1):
+    # Add the first host and connect it to the switch
+    host1 = net.addHost('h1')
+    net.addLink(host1, switch)
+
+    # Add the other hosts and connect them to the first host
+    for i in range(2, num_hosts + 1):
         host = net.addHost(f'h{i}')
-        net.addLink(host, switch)
+        net.addLink(host, host1)  # Connect other hosts to the first host
 
     # Start the network
     net.start()
@@ -39,4 +43,4 @@ def star_topology():
 
 if __name__ == '__main__':
     setLogLevel('info')
-    star_topology()
+    modified_topology()
