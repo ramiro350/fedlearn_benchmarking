@@ -16,7 +16,7 @@ USE_FEDBN: bool = True
 
 DEVICE = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-class DataClient(fl.client.NumPyClient):
+class FlowerClient(fl.client.NumPyClient):
     def __init__(
         self,
         model: net.Net,
@@ -71,7 +71,7 @@ class DataClient(fl.client.NumPyClient):
         return float(loss), len(self.testloader.dataset), {"accuracy": float(accuracy)}
 
 def main() -> None:
-    """Load data, start DataClient."""
+    """Load data, start FlowerClient."""
     parser = argparse.ArgumentParser(description="Flower")
     parser.add_argument("--partition-id", type=int, required=True, choices=range(0, 10))
     args = parser.parse_args()
@@ -86,8 +86,8 @@ def main() -> None:
     _ = model(next(iter(trainloader))["img"].to(DEVICE))
 
     # Start client
-    client = DataClient(model, trainloader, testloader).to_client()
-    fl.client.start_client(server_address="10.0.0.1:8000", client=client)
+    client = FlowerClient(model, trainloader, testloader)
+    fl.client.start_numpy_client(server_address="10.0.0.1:8000", client=client)
 
 if __name__ == "__main__":
     main()
