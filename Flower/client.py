@@ -87,7 +87,7 @@ def main() -> None:
 
     # Start client
     client = DataClient(model, trainloader, testloader).to_client()
-    fl.client.start_client(server_address="10.0.0.1:8080", client=client)
+    fl.client.start_client(server_address="10.0.0.1:8000", client=client)
 
 if __name__ == "__main__":
     main()
