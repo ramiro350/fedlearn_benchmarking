@@ -29,12 +29,14 @@ def star_topology():
     switch1 = net.addSwitch('s1')
 
     # Add the first host and connect it to the switch
-    host1 = net.addNAT('h1')
+    #host1 = net.addNAT('h1')
+    host1 = net.addNAT('server1')
     net.addLink(host1, switch1)
 
     # Add the other hosts and connect them to the first host
     for i in range(2, num_hosts + 1):
-        host = net.addNAT(f'h{i}')
+        #host = net.addNAT(f'h{i}')
+        host = net.addNAT(f'site-{i-1}')
         net.addLink(host,switch1)
 
     info( '*** Starting network\n')
